@@ -223,7 +223,7 @@ Historical server sample에서 가장 많이 등장한 기술은:
 | Docker | 20.5% |
 
 <p align="center">
-  <img src="graph_top_skills_서버_개발자.png" width="820" alt="Server developer top skills" />
+  <img src="results/figures/graph_top_skills_서버_개발자.png" width="820" alt="Server developer top skills" />
 </p>
 
 Corrected taxonomy 기준으로 **서버 row의 54.5%에는 Cloud/Infra 기술이 하나 이상 포함**되어 있었습니다.
@@ -243,7 +243,7 @@ Corrected taxonomy 기준으로 **서버 row의 54.5%에는 Cloud/Infra 기술�
 | Git | 23.9% |
 
 <p align="center">
-  <img src="graph_top_skills_프론트엔드_개발자.png" width="820" alt="Frontend developer top skills" />
+  <img src="results/figures/graph_top_skills_프론트엔드_개발자.png" width="820" alt="Frontend developer top skills" />
 </p>
 
 React와 TypeScript가 표본 내에서 높은 빈도로 나타났으며, 기술 occurrence 기준으로 **Framework/Library category가 42.9%**를 차지했습니다.
@@ -261,7 +261,7 @@ React와 TypeScript가 표본 내에서 높은 빈도로 나타났으며, 기술
 | Git | 13.8% |
 
 <p align="center">
-  <img src="graph_top_skills_데이터_사이언티스트.png" width="820" alt="Data scientist top skills" />
+  <img src="results/figures/graph_top_skills_데이터_사이언티스트.png" width="820" alt="Data scientist top skills" />
 </p>
 
 Python이 가장 넓게 나타났고 PyTorch와 TensorFlow가 뒤를 이어, 이 historical sample에서는 ML framework가 주요 요구 기술군으로 나타났습니다.
@@ -281,7 +281,7 @@ Python이 가장 넓게 나타났고 PyTorch와 TensorFlow가 뒤를 이어, 이
 의 비율입니다.
 
 <p align="center">
-  <img src="graph_skill_heatmap.png" width="1000" alt="Developer skill heatmap" />
+  <img src="results/figures/graph_skill_heatmap.png" width="1000" alt="Developer skill heatmap" />
 </p>
 
 히트맵에서는 세 직무가 서로 다른 기술 생태계에 집중되는 패턴을 확인할 수 있습니다.
@@ -337,7 +337,7 @@ Posting Prevalence      : 54.5%
 두 값을 혼용하지 않습니다.
 
 <p align="center">
-  <img src="graph_skill_category_stacked.png" width="900" alt="Skill category composition" />
+  <img src="results/figures/graph_skill_category_stacked.png" width="900" alt="Skill category composition" />
 </p>
 
 ---
