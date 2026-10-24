@@ -1,325 +1,95 @@
+"""Offline plots for the frozen 2025 Wanted query snapshot."""
+import argparse
+import json
+from pathlib import Path
+
+import matplotlib
+import matplotlib.font_manager as fm
 import pandas as pd
-import matplotlib.pyplot as plt
 import seaborn as sns
-import matplotlib.cm as cm
-import matplotlib.ticker as mticker
-from collections import Counter
-import ast  
-import platform 
-import matplotlib.font_manager as fm 
-import numpy as np
 
-# --- 데이터 정규화 맵 ---
-SKILL_NORMALIZATION_MAP = {
-    # C/C++ 통일
-    'c++': 'C++', 'c / c++': 'C++', 'c/c++': 'C++',
-    
-    # Python 계열
-    'python': 'Python', 'django': 'Django', 'flask': 'Flask', 'fastapi': 'FastAPI',
-    
-    # Java/Kotlin 계열
-    'java': 'Java', 'spring': 'Spring', 'spring boot': 'Spring Boot', 'springboot': 'Spring Boot',
-    'jpa': 'JPA', 'kotlin': 'Kotlin',
+from analysis import (
+    build_summary, compute_sample_audit, load_and_clean_data, normalization_audit,
+)
 
-    # Front-end 계열
-    'javascript': 'JavaScript', 'typescript': 'TypeScript', 'react': 'React', 'react.js': 'React',
-    'vue.js': 'Vue.js', 'vue': 'Vue.js', 'next.js': 'Next.js', 'node.js': 'Node.js',
-    'redux': 'Redux', 'recoil': 'Recoil', 'svelte': 'Svelte',
-    
-    # DB 계열
-    'sql': 'SQL', 'mysql': 'MySQL', 'postgresql': 'PostgreSQL', 'oracle': 'Oracle',
-    'redis': 'Redis', 'mongodb': 'MongoDB', 'mariadb': 'MariaDB',
-    
-    # Cloud/Infra 계열
-    'aws': 'AWS', 'gcp': 'GCP', 'azure': 'Azure', 'docker': 'Docker', 'kubernetes': 'Kubernetes',
-    'git': 'Git', 'github': 'Git',
-    
-    # Data Science 계열
-    'r': 'R', 'pandas': 'Pandas', 'tensorflow': 'TensorFlow', 'pytorch': 'PyTorch',
-    'scikit-learn': 'Scikit-learn', 'keras': 'Keras', 'tableau': 'Tableau', 'power bi': 'Power BI',
-}
 
-# --- 기술 카테고리 분류 맵 ---
-SKILL_CATEGORY_MAP = {
-    'Language': ['Java', 'Python', 'JavaScript', 'TypeScript', 'Kotlin', 'C++', 'SQL', 'R', 'C#'],
-    'Framework/Lib': ['React', 'Spring', 'Spring Boot', 'Next.js', 'Django', 'Flask', 'FastAPI', 'Vue.js', 'PyTorch', 'TensorFlow', 'Scikit-learn', 'Pandas', 'Redux', 'Recoil', 'Svelte', 'Node.js'],
-    'Database': ['MySQL', 'PostgreSQL', 'Redis', 'MongoDB', 'MariaDB', 'Oracle'],
-    'Infra/Cloud': ['AWS', 'Docker', 'Kubernetes', 'Git', 'GCP', 'Azure', 'Linux'],
-    'Tool/Etc': ['Tableau', 'Power BI']
-}
+def configure_font():
+    names = {font.name for font in fm.fontManager.ttflist}
+    for name in ("Malgun Gothic", "AppleGothic", "NanumGothic", "Noto Sans CJK JP", "Noto Sans CJK KR"):
+        if name in names:
+            matplotlib.rcParams["font.family"] = name
+            matplotlib.rcParams["axes.unicode_minus"] = False
+            return
+    raise RuntimeError("Korean font unavailable. Install fonts-noto-cjk or NanumGothic before plotting.")
 
-# 폰트 설정
-def set_korean_font():
-    os_name = platform.system()
-    if os_name == 'Windows':
-        font_name = 'Malgun Gothic'
-    elif os_name == 'Darwin': # macOS
-        font_name = 'AppleGothic'
-    else: # Linux
-        font_name = 'NanumGothic' 
-    
-    try:
-        plt.rc('font', family=font_name)
-        plt.rcParams['axes.unicode_minus'] = False
-        print(f"폰트가 '{font_name}'(으)로 설정되었습니다.")
-    except Exception as e:
-        print(f"폰트 설정 오류: {e}.")
 
-# 1. 데이터 불러오기 및 정규화
-def normalize_skills(skill_list):
-    normalized_set = set() 
-    for skill in skill_list:
-        skill_low = skill.lower().strip() 
-        standard_skill = SKILL_NORMALIZATION_MAP.get(skill_low)
-        if standard_skill:
-            normalized_set.add(standard_skill)
-    return list(normalized_set)
+def plot_results(summary, output_dir, show=False):
+    import matplotlib.pyplot as plt
 
-def load_and_clean_data(csv_file):
-    try:
-        df = pd.read_csv(csv_file)
-    except FileNotFoundError:
-        print(f"[오류] '{csv_file}' 파일을 찾을 수 없습니다.")
-        return None
-    
-    def safe_literal_eval(s):
-        try: return ast.literal_eval(s)
-        except: return []
-            
-    df['skills_raw'] = df['skills'].apply(safe_literal_eval)
-    df['skills'] = df['skills_raw'].apply(normalize_skills) 
-    print("데이터 로딩 및 정규화 완료:")
-    print(df['job_role'].value_counts())
-    return df
+    def save(fig, name):
+        fig.tight_layout()
+        fig.savefig(output_dir / name, dpi=150)
+        if show:
+            plt.show()
+        plt.close(fig)
 
-# 2. 시각화 1: 직무별 공고 수(시장 크기) 비교 (막대 그래프)
-def plot_job_counts(df, filename='graph_job_role_counts.png'):
-    print("직무별 공고 수 시각화 중...")
-    
-    job_counts = df['job_role'].value_counts().sort_values(ascending=True) # 오름차순 정렬
-    
+    counts = summary["role_counts"]
     fig, ax = plt.subplots(figsize=(10, 5))
-    
-    # Sequential Colormap
-    cmap = cm.get_cmap('viridis_r')
-    colors = cmap(np.linspace(0.4, 0.8, len(job_counts)))
-    
-    bars = ax.barh(job_counts.index, job_counts.values, color=colors)
-    
-    # 레이블 및 제목 설정
-    ax.set_title("직무별 신입 채용 공고 수 (시장 규모) 비교", fontsize=16)
-    ax.set_xlabel("수집된 공고 수 (N)", fontsize=12)
-    ax.set_ylabel("직무", fontsize=12)
-    
-    # 축 서식 설정 (콤마)
-    ax.xaxis.set_major_formatter(mticker.StrMethodFormatter('{x:,.0f}'))
-    
-    # 그리드 추가
-    ax.grid(color='gray', linewidth=0.2, axis='x', linestyle='--')
-    ax.set_axisbelow(True)
-    
-    # 막대 위에 숫자 표시
-    for bar in bars:
-        width = bar.get_width()
-        ax.text(width + 0.5, # 막대 오른쪽에
-                bar.get_y() + bar.get_height()/2, # 막대 중앙 높이에
-                f'{width}건', # 표시할 텍스트
-                va='center', 
-                ha='left')
-    
-    plt.tight_layout()
-    plt.savefig(filename)
-    print(f"'{filename}' 그래프 저장 완료.")
+    bars = ax.barh(list(counts), list(counts.values()), color="#438b88")
+    ax.bar_label(bars, padding=4)
+    ax.set(title="직무별 분석 대상 공고 Row 수", xlabel="수집 표본 Row 수 (N)", xlim=(0, max(counts.values()) * 1.15))
+    save(fig, "graph_job_role_counts.png")
 
-# 3. 직무별 기술 스택 분석
-def analyze_skill_frequency(df, top_n=20):
-    job_roles = df['job_role'].unique()
-    all_skill_data = {}
-    for role in job_roles:
-        role_df = df[df['job_role'] == role]
-        total_jobs_for_role = len(role_df)
-        if total_jobs_for_role == 0: continue
-        all_skills_list = [skill for sublist in role_df['skills'] for skill in sublist]
-        skill_counts = Counter(all_skills_list)
-        top_skills_df = pd.DataFrame(skill_counts.most_common(top_n), columns=['Skill', 'Count'])
-        top_skills_df['Percentage'] = (top_skills_df['Count'] / total_jobs_for_role) * 100
-        # 막대그래프를 위해 역순 정렬 (맨 위가 1위가 되도록)
-        all_skill_data[role] = top_skills_df.sort_values(by='Percentage', ascending=True)
-    return all_skill_data
+    top = summary["top_skills_by_role"]
+    for role, records in top.items():
+        fig, ax = plt.subplots(figsize=(12, 9))
+        records = records[::-1]
+        bars = ax.barh([r["skill"] for r in records], [r["percentage"] for r in records], color="#438b88")
+        ax.bar_label(bars, fmt="%.1f%%", padding=3)
+        ax.set(title=f"{role}: 분석 표본 주요 기술 (N={counts[role]} rows)",
+               xlabel="분석 표본 내 공고 포함 비율 (%) — 분모: 해당 직무 Row 수", xlim=(0, 100))
+        save(fig, f"graph_top_skills_{role.replace(' ', '_')}.png")
 
-# --- 직무별 기술 카테고리 비율 분석 ---
-def analyze_skill_category(df):
-    job_roles = df['job_role'].unique()
-    category_data = {role: Counter() for role in job_roles}
-    
-    # 기술 스택을 카테고리로 변환하여 집계
-    for _, row in df.iterrows():
-        role = row['job_role']
-        for skill in row['skills']:
-            found_category = 'Other'
-            for cat, skills in SKILL_CATEGORY_MAP.items():
-                if skill in skills:
-                    found_category = cat
-                    break
-            category_data[role][found_category] += 1
-            
-    # DataFrame으로 변환 (비율 계산)
-    category_df = pd.DataFrame(category_data).T.fillna(0)
-    # 100% 비율로 변환
-    category_ratio_df = category_df.div(category_df.sum(axis=1), axis=0) * 100
-    
-    return category_ratio_df
+    skills = sorted({r["skill"] for records in top.values() for r in records[:15]})
+    # All selected skills must be measured even if outside another role's top 20.
+    frequencies = summary["all_skill_frequencies"]
+    matrix = pd.DataFrame({role: {s: next((r["percentage"] for r in records if r["skill"] == s), 0)
+                                  for s in skills} for role, records in frequencies.items()}).T
+    fig, ax = plt.subplots(figsize=(20, 6))
+    sns.heatmap(matrix, annot=True, fmt=".1f", cmap="rocket_r", ax=ax, cbar_kws={"label": "% of role rows"})
+    ax.set(title="직무별 분석 표본 내 주요 기술 포함 비율 (%)", xlabel="기술 — 분모: 해당 직무 Row 수", ylabel="직무")
+    plt.setp(ax.get_xticklabels(), rotation=45, ha="right")
+    save(fig, "graph_skill_heatmap.png")
 
-# 4. 시각화 2: 직무별 요구 기술 topN (막대 그래프)
-def plot_top_skills(skill_data, filename_prefix='graph_top_skills'):
-    for role, data in skill_data.items():
-        if data.empty:
-            print(f"[{role}] 직무에 대한 데이터가 없어 막대 그래프를 건너뜁니다.")
-            continue
-            
-        fig, ax = plt.subplots(figsize=(12, 10))
-        
-        skills = data['Skill']
-        percentages = data['Percentage']
-        
-        # Colormap 설정
-        cmap = cm.get_cmap('viridis_r')
-        # 0.2 ~ 0.9 범위의 색상을 사용 (너무 연하거나 진한 색 제외)
-        colors = cmap(np.linspace(0.2, 0.9, len(percentages)))
-        
-        # 가로 막대그래프(barh) 생성
-        ax.barh(skills, percentages, color=colors)
-        
-        # 레이블 및 제목 설정
-        total_n = int(round((data['Count'] / (data['Percentage'] / 100)).mean()))
-        ax.set_title(f"'{role}' 직무 요구 기술 Top {len(data)} (N={total_n})", fontsize=16)
-        ax.set_xlabel("공고 포함 비율 (%)", fontsize=12)
-        ax.set_ylabel("기술 스택", fontsize=12)
-        
-        # 축 서식 설정
-        ax.xaxis.set_major_formatter(mticker.PercentFormatter(xmax=100.0))
-        
-        # 가독성을 위한 그리드 추가
-        ax.grid(color='gray', linewidth=0.2, axis='x', linestyle='--')
-        ax.set_axisbelow(True)
+    fig, ax = plt.subplots(figsize=(12, 6))
+    pd.DataFrame(summary["category_occurrence_composition"]).T.plot.barh(stacked=True, ax=ax, colormap="Set2")
+    ax.set(title="직무별 기술 언급의 카테고리 구성 비율", xlabel="각 직무에서 집계된 canonical skill occurrence 기준 (%)", xlim=(0, 100), ylabel="직무")
+    for container in ax.containers:
+        ax.bar_label(container, labels=[f"{b.get_width():.1f}%" if b.get_width() > 5 else "" for b in container], label_type="center")
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.19), ncol=4)
+    save(fig, "graph_skill_category_stacked.png")
 
-        # 라벨 추가
-        for container in ax.containers:
-            ax.bar_label(container, fmt='%.1f%%', padding=3, fontsize=10)
-        
-        # 레이아웃 최적화
-        plt.tight_layout()
-        
-        filename = f"{filename_prefix}_{role.replace(' ', '_')}.png"
-        plt.savefig(filename)
-        print(f"'{filename}' 그래프 저장 완료.")
- 
 
-# 5. 시각화 3: 직무 간 기술 스택 비교 히트맵
-def plot_heatmap_comparison(df, skill_data, top_n=15, filename='graph_skill_heatmap.png'):
-    all_top_skills = set()
-    for data in skill_data.values():
-        all_top_skills.update(data.tail(top_n)['Skill'])
-    
-    all_top_skills = sorted(list(all_top_skills))
-    
-    heatmap_data = {}
-    job_roles = df['job_role'].unique()
-    
-    for role in job_roles:
-        role_df = df[df['job_role'] == role]
-        total_jobs_for_role = len(role_df)
-        if total_jobs_for_role == 0:
-            continue
-        
-        all_skills_list = [skill for sublist in role_df['skills'] for skill in sublist]
-        skill_counts = Counter(all_skills_list)
-        
-        skill_percentages = {}
-        for skill in all_top_skills:
-            percentage = (skill_counts.get(skill, 0) / total_jobs_for_role) * 100
-            skill_percentages[skill] = percentage
-            
-        heatmap_data[role] = skill_percentages
-    
-    heatmap_df = pd.DataFrame(heatmap_data).T 
-    
-    plt.figure(figsize=(20, 10))
-
-    sns.heatmap(
-        heatmap_df, 
-        annot=True,     
-        fmt=".1f",      
-        cmap='rocket_r', 
-        linewidths=.5   
-    )
-    plt.title("직무별 주요 기술 스택 요구 비율(%) 비교", fontsize=18)
-    plt.xlabel("기술 스택", fontsize=14)
-    plt.ylabel("직무", fontsize=14)
-    plt.xticks(rotation=45, ha='right')
-    plt.tight_layout()
-    
-    plt.savefig(filename)
-    print(f"'{filename}' 히트맵 저장 완료.")
-
-# 6. 시각화 4: 기술 카테고리별 비중 (누적 막대)
-def plot_skill_category_stacked(category_ratio_df, filename='graph_skill_category_stacked.png'):
-    print("기술 카테고리 비중 시각화 중...")
-    
-    fig, ax = plt.subplots(figsize=(10, 6))
-    
-    # 누적 막대 그래프 그리기
-    category_ratio_df.plot(kind='barh', stacked=True, ax=ax, colormap='Set2', width=0.7)
-    
-    ax.set_title("직무별 요구 기술의 유형별 비중 비교", fontsize=16)
-    ax.set_xlabel("비중 (%)", fontsize=12)
-    ax.set_ylabel("직무", fontsize=12)
-    ax.set_xlim(0, 100)
-    
-    # 범례 위치 조정
-    ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15), ncol=6)
-    
-    # 값 표시 (비율)
-    for c in ax.containers:
-        labels = [f'{v.get_width():.1f}%' if v.get_width() > 5 else '' for v in c]
-        ax.bar_label(c, labels=labels, label_type='center', fontsize=10)
-
-    # 가독성을 위한 그리드 추가
-    ax.grid(color='gray', linewidth=0.2, axis='x', linestyle='--')
-    ax.set_axisbelow(True)
-
-    plt.tight_layout()
-    plt.savefig(filename)
-    print(f"'{filename}' 그래프 저장 완료.")
-
-# 6. 메인 실행 함수
 def main():
-    INPUT_CSV_FILE = 'wanted_jobs.csv' 
-    
-    set_korean_font() 
-    df = load_and_clean_data(INPUT_CSV_FILE)
-    
-    if df is not None:
-        # 직무별 공고 수(시장 크기) 비교 막대 그래프 생성
-        plot_job_counts(df)
-        
-        # 기술 스택 빈도 분석
-        skill_data = analyze_skill_frequency(df, top_n=20)
-        
-        # 막대 그래프 생성
-        plot_top_skills(skill_data)
-        
-        # 비교 히트맵 생성
-        plot_heatmap_comparison(df, skill_data)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--input", type=Path, default=Path("wanted_jobs.csv"))
+    parser.add_argument("--output-dir", type=Path, default=Path("."))
+    parser.add_argument("--show", action="store_true")
+    args = parser.parse_args()
+    if not args.show:
+        matplotlib.use("Agg")
+    configure_font()
+    df = load_and_clean_data(args.input)
+    summary = build_summary(df, args.input)
+    results = args.output_dir / "results"
+    results.mkdir(parents=True, exist_ok=True)
+    for name, data in (("analysis_summary.json", summary), ("sample_audit.json", compute_sample_audit(df))):
+        (results / name).write_text(json.dumps(data, ensure_ascii=False, indent=2, allow_nan=False) + "\n", encoding="utf-8")
+    normalization_audit(df).to_csv(results / "normalization_audit.csv", index=False)
+    from analysis import compute_skill_frequency
+    plot_results({**summary, "all_skill_frequencies": compute_skill_frequency(df)}, args.output_dir, args.show)
+    print(f"Analyzed {len(df)} historical rows; wrote graphs and results to {args.output_dir}")
 
-        # 카테고리 분석 및 시각화 실행
-        category_ratio_df = analyze_skill_category(df)
-        plot_skill_category_stacked(category_ratio_df)
-
-        # 모든 플롯이 생성된 후, 마지막에 show() 호출
-        print("\n모든 시각화가 파일로 저장되었습니다. 이제 화면에 표시합니다.")
-        plt.show()
 
 if __name__ == "__main__":
     main()
-

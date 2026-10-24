@@ -1,0 +1,400 @@
+{
+  "analysis_version": "2.0",
+  "historical_project_year": 2025,
+  "analysis_revision_year": 2026,
+  "source_file": "wanted_jobs.csv",
+  "source_sha256": "1fc9dd4a73dffd3c6cd2e3b7a0aa76c50f0ab67798243d7552b537c6ac95a5f1",
+  "row_count": 119,
+  "role_counts": {
+    "데이터 사이언티스트": 29,
+    "서버 개발자": 44,
+    "프론트엔드 개발자": 46
+  },
+  "unique_company_title_proxy_count": 112,
+  "cross_role_duplicate_proxy_count": 7,
+  "raw_skill_mentions": 503,
+  "canonical_skill_mentions": 495,
+  "retained_unmapped_skill_mentions": 64,
+  "within_row_alias_or_duplicate_mentions_collapsed": 8,
+  "silent_dropped_valid_skill_mentions": 0,
+  "top_skills_by_role": {
+    "데이터 사이언티스트": [
+      {
+        "skill": "Python",
+        "count": 19,
+        "percentage": 65.51724137931035
+      },
+      {
+        "skill": "PyTorch",
+        "count": 13,
+        "percentage": 44.827586206896555
+      },
+      {
+        "skill": "TensorFlow",
+        "count": 9,
+        "percentage": 31.03448275862069
+      },
+      {
+        "skill": "SQL",
+        "count": 6,
+        "percentage": 20.689655172413794
+      },
+      {
+        "skill": "Git",
+        "count": 4,
+        "percentage": 13.793103448275861
+      },
+      {
+        "skill": "Scikit-learn",
+        "count": 3,
+        "percentage": 10.344827586206897
+      },
+      {
+        "skill": "AWS",
+        "count": 2,
+        "percentage": 6.896551724137931
+      },
+      {
+        "skill": "Docker",
+        "count": 2,
+        "percentage": 6.896551724137931
+      },
+      {
+        "skill": "Java",
+        "count": 2,
+        "percentage": 6.896551724137931
+      },
+      {
+        "skill": "MySQL",
+        "count": 2,
+        "percentage": 6.896551724137931
+      },
+      {
+        "skill": "NLP",
+        "count": 2,
+        "percentage": 6.896551724137931
+      },
+      {
+        "skill": "OpenCV",
+        "count": 2,
+        "percentage": 6.896551724137931
+      },
+      {
+        "skill": "Pandas",
+        "count": 2,
+        "percentage": 6.896551724137931
+      },
+      {
+        "skill": "Tableau",
+        "count": 2,
+        "percentage": 6.896551724137931
+      },
+      {
+        "skill": "데이터 분석",
+        "count": 2,
+        "percentage": 6.896551724137931
+      },
+      {
+        "skill": "API",
+        "count": 1,
+        "percentage": 3.4482758620689653
+      },
+      {
+        "skill": "Azure",
+        "count": 1,
+        "percentage": 3.4482758620689653
+      },
+      {
+        "skill": "Data Analysis",
+        "count": 1,
+        "percentage": 3.4482758620689653
+      },
+      {
+        "skill": "Excel",
+        "count": 1,
+        "percentage": 3.4482758620689653
+      },
+      {
+        "skill": "GCP",
+        "count": 1,
+        "percentage": 3.4482758620689653
+      }
+    ],
+    "서버 개발자": [
+      {
+        "skill": "AWS",
+        "count": 16,
+        "percentage": 36.36363636363637
+      },
+      {
+        "skill": "Java",
+        "count": 16,
+        "percentage": 36.36363636363637
+      },
+      {
+        "skill": "Python",
+        "count": 13,
+        "percentage": 29.545454545454547
+      },
+      {
+        "skill": "MySQL",
+        "count": 12,
+        "percentage": 27.27272727272727
+      },
+      {
+        "skill": "Spring",
+        "count": 10,
+        "percentage": 22.727272727272727
+      },
+      {
+        "skill": "Docker",
+        "count": 9,
+        "percentage": 20.454545454545457
+      },
+      {
+        "skill": "Kotlin",
+        "count": 9,
+        "percentage": 20.454545454545457
+      },
+      {
+        "skill": "SQL",
+        "count": 9,
+        "percentage": 20.454545454545457
+      },
+      {
+        "skill": "Git",
+        "count": 8,
+        "percentage": 18.181818181818183
+      },
+      {
+        "skill": "Node.js",
+        "count": 8,
+        "percentage": 18.181818181818183
+      },
+      {
+        "skill": "PostgreSQL",
+        "count": 8,
+        "percentage": 18.181818181818183
+      },
+      {
+        "skill": "Redis",
+        "count": 7,
+        "percentage": 15.909090909090908
+      },
+      {
+        "skill": "React",
+        "count": 6,
+        "percentage": 13.636363636363635
+      },
+      {
+        "skill": "FastAPI",
+        "count": 5,
+        "percentage": 11.363636363636363
+      },
+      {
+        "skill": "JavaScript",
+        "count": 5,
+        "percentage": 11.363636363636363
+      },
+      {
+        "skill": "Spring Boot",
+        "count": 5,
+        "percentage": 11.363636363636363
+      },
+      {
+        "skill": "Django",
+        "count": 4,
+        "percentage": 9.090909090909092
+      },
+      {
+        "skill": "Linux",
+        "count": 4,
+        "percentage": 9.090909090909092
+      },
+      {
+        "skill": "MongoDB",
+        "count": 4,
+        "percentage": 9.090909090909092
+      },
+      {
+        "skill": "TypeScript",
+        "count": 4,
+        "percentage": 9.090909090909092
+      }
+    ],
+    "프론트엔드 개발자": [
+      {
+        "skill": "React",
+        "count": 33,
+        "percentage": 71.73913043478261
+      },
+      {
+        "skill": "TypeScript",
+        "count": 22,
+        "percentage": 47.82608695652174
+      },
+      {
+        "skill": "Next.js",
+        "count": 17,
+        "percentage": 36.95652173913043
+      },
+      {
+        "skill": "JavaScript",
+        "count": 12,
+        "percentage": 26.08695652173913
+      },
+      {
+        "skill": "Git",
+        "count": 11,
+        "percentage": 23.91304347826087
+      },
+      {
+        "skill": "Java",
+        "count": 9,
+        "percentage": 19.565217391304348
+      },
+      {
+        "skill": "Kotlin",
+        "count": 9,
+        "percentage": 19.565217391304348
+      },
+      {
+        "skill": "AWS",
+        "count": 7,
+        "percentage": 15.217391304347828
+      },
+      {
+        "skill": "Python",
+        "count": 7,
+        "percentage": 15.217391304347828
+      },
+      {
+        "skill": "Spring",
+        "count": 6,
+        "percentage": 13.043478260869565
+      },
+      {
+        "skill": "FastAPI",
+        "count": 4,
+        "percentage": 8.695652173913043
+      },
+      {
+        "skill": "Recoil",
+        "count": 4,
+        "percentage": 8.695652173913043
+      },
+      {
+        "skill": "Redux",
+        "count": 4,
+        "percentage": 8.695652173913043
+      },
+      {
+        "skill": "Django",
+        "count": 3,
+        "percentage": 6.521739130434782
+      },
+      {
+        "skill": "PostgreSQL",
+        "count": 3,
+        "percentage": 6.521739130434782
+      },
+      {
+        "skill": "Android",
+        "count": 2,
+        "percentage": 4.3478260869565215
+      },
+      {
+        "skill": "Azure",
+        "count": 2,
+        "percentage": 4.3478260869565215
+      },
+      {
+        "skill": "C#",
+        "count": 2,
+        "percentage": 4.3478260869565215
+      },
+      {
+        "skill": "C++",
+        "count": 2,
+        "percentage": 4.3478260869565215
+      },
+      {
+        "skill": "Docker",
+        "count": 2,
+        "percentage": 4.3478260869565215
+      }
+    ]
+  },
+  "category_occurrence_composition": {
+    "데이터 사이언티스트": {
+      "Language": 31.818181818181817,
+      "Framework/Library": 34.090909090909086,
+      "Database": 4.545454545454546,
+      "Cloud/Infra": 6.8181818181818175,
+      "Development Tool": 4.545454545454546,
+      "Data/BI Tool": 3.4090909090909087,
+      "Other": 14.772727272727273
+    },
+    "서버 개발자": {
+      "Language": 30.33175355450237,
+      "Framework/Library": 26.540284360189574,
+      "Database": 15.165876777251185,
+      "Cloud/Infra": 18.48341232227488,
+      "Development Tool": 3.7914691943127963,
+      "Data/BI Tool": 0.47393364928909953,
+      "Other": 5.213270142180095
+    },
+    "프론트엔드 개발자": {
+      "Language": 33.16326530612245,
+      "Framework/Library": 42.857142857142854,
+      "Database": 4.591836734693878,
+      "Cloud/Infra": 7.653061224489796,
+      "Development Tool": 6.122448979591836,
+      "Data/BI Tool": 0.0,
+      "Other": 5.612244897959184
+    }
+  },
+  "category_posting_prevalence": {
+    "데이터 사이언티스트": {
+      "Language": 72.41379310344827,
+      "Framework/Library": 55.172413793103445,
+      "Database": 13.793103448275861,
+      "Cloud/Infra": 13.793103448275861,
+      "Development Tool": 13.793103448275861,
+      "Data/BI Tool": 6.896551724137931,
+      "Other": 17.24137931034483
+    },
+    "서버 개발자": {
+      "Language": 77.27272727272727,
+      "Framework/Library": 68.18181818181817,
+      "Database": 45.45454545454545,
+      "Cloud/Infra": 54.54545454545454,
+      "Development Tool": 18.181818181818183,
+      "Data/BI Tool": 2.272727272727273,
+      "Other": 11.363636363636363
+    },
+    "프론트엔드 개발자": {
+      "Language": 80.43478260869566,
+      "Framework/Library": 86.95652173913044,
+      "Database": 10.869565217391305,
+      "Cloud/Infra": 21.73913043478261,
+      "Development Tool": 26.08695652173913,
+      "Data/BI Tool": 0.0,
+      "Other": 8.695652173913043
+    }
+  },
+  "metric_semantics": {
+    "category_occurrence_composition": "100 * category canonical occurrences / all canonical occurrences in role",
+    "category_posting_prevalence": "100 * role rows with >=1 category skill / all rows in role",
+    "top_skills_by_role": "100 * role rows containing canonical skill / all rows in role",
+    "retained_unmapped_skill_mentions": "Raw mentions retained by fallback before within-row deduplication"
+  },
+  "sample_scope": {
+    "source": "Wanted historical 2025 project CSV",
+    "search_filter": "years=0",
+    "strict_entry_level_verified": false,
+    "collection_date": null,
+    "posting_identity": "Exact company-title tuple proxy; not a Wanted job ID",
+    "historical_posting_urls_and_ids_available": false
+  }
+}

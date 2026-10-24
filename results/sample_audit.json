@@ -1,0 +1,133 @@
+{
+  "row_count": 119,
+  "role_counts": {
+    "데이터 사이언티스트": 29,
+    "서버 개발자": 44,
+    "프론트엔드 개발자": 46
+  },
+  "unique_company_title_proxy_count": 112,
+  "cross_role_duplicate_proxy_count": 7,
+  "cross_role_duplicate_proxies": [
+    {
+      "company": "도슨티",
+      "title": "Software engineer (AI, Back, Fullstack)",
+      "query_roles": [
+        "서버 개발자",
+        "프론트엔드 개발자"
+      ],
+      "row_count": 2
+    },
+    {
+      "company": "메이크스타",
+      "title": "Software Engineer",
+      "query_roles": [
+        "서버 개발자",
+        "프론트엔드 개발자"
+      ],
+      "row_count": 2
+    },
+    {
+      "company": "전능아이티",
+      "title": "[Smartdoctor] 산업기능요원(보충역) 개발자",
+      "query_roles": [
+        "서버 개발자",
+        "프론트엔드 개발자"
+      ],
+      "row_count": 2
+    },
+    {
+      "company": "채널코퍼레이션",
+      "title": "[채널톡] Software Engineer",
+      "query_roles": [
+        "서버 개발자",
+        "프론트엔드 개발자"
+      ],
+      "row_count": 2
+    },
+    {
+      "company": "컨포트랩",
+      "title": "Software Engineer (~6년)",
+      "query_roles": [
+        "서버 개발자",
+        "프론트엔드 개발자"
+      ],
+      "row_count": 2
+    },
+    {
+      "company": "코드비전",
+      "title": "[인턴] 프론트엔드, 백엔드 개발자",
+      "query_roles": [
+        "서버 개발자",
+        "프론트엔드 개발자"
+      ],
+      "row_count": 2
+    },
+    {
+      "company": "테크타카(ARGO)",
+      "title": "Software Engineer (Backend)_신입",
+      "query_roles": [
+        "서버 개발자",
+        "프론트엔드 개발자"
+      ],
+      "row_count": 2
+    }
+  ],
+  "broader_experience_title_row_count": 9,
+  "broader_experience_title_rows": [
+    {
+      "row_index": 4,
+      "job_role": "서버 개발자",
+      "title": "[다나와개발본부] Backend Engineer (4년 이하)"
+    },
+    {
+      "row_index": 17,
+      "job_role": "서버 개발자",
+      "title": "Software Engineer (~6년)"
+    },
+    {
+      "row_index": 31,
+      "job_role": "서버 개발자",
+      "title": "백엔드개발자(Node.js) / 3년 이하"
+    },
+    {
+      "row_index": 45,
+      "job_role": "프론트엔드 개발자",
+      "title": "프론트엔드 엔지니어 (0~5년)"
+    },
+    {
+      "row_index": 53,
+      "job_role": "프론트엔드 개발자",
+      "title": "[픽셀 히어로즈 어드벤처] 프론트엔드 개발자 (신입 ~ 5년)"
+    },
+    {
+      "row_index": 57,
+      "job_role": "프론트엔드 개발자",
+      "title": "프론트엔드 개발자(신입~3년차)"
+    },
+    {
+      "row_index": 66,
+      "job_role": "프론트엔드 개발자",
+      "title": "Software Engineer (~6년)"
+    },
+    {
+      "row_index": 85,
+      "job_role": "프론트엔드 개발자",
+      "title": "프론트엔드 개발자 (신입~3년)"
+    },
+    {
+      "row_index": 87,
+      "job_role": "프론트엔드 개발자",
+      "title": "숙박예약 및 커뮤니티 플랫폼 프론트엔드(NextJS) (신입~1년차)"
+    }
+  ],
+  "experience_heuristic": "Explicit integer >=1 followed by 년; audit only, not ground truth. Includes 신입~1년차.",
+  "rows_removed": 0,
+  "sample_scope": {
+    "source": "Wanted historical 2025 project CSV",
+    "search_filter": "years=0",
+    "strict_entry_level_verified": false,
+    "collection_date": null,
+    "posting_identity": "Exact company-title tuple proxy; not a Wanted job ID",
+    "historical_posting_urls_and_ids_available": false
+  }
+}

@@ -1,0 +1,87 @@
+raw_skill,canonical_skill,category,raw_occurrence_count,mapping_type
+.NET,.NET,Framework/Library,1,retained_unmapped
+API,API,Other,1,retained_unmapped
+AWS,AWS,Cloud/Infra,25,canonical
+Android,Android,Other,3,retained_unmapped
+Azure,Azure,Cloud/Infra,6,canonical
+C / C++,C++,Language,4,alias
+C#,C#,Language,3,retained_unmapped
+C++,C++,Language,3,canonical
+DSP,DSP,Other,1,retained_unmapped
+Data Analysis,Data Analysis,Other,1,retained_unmapped
+DevOps,DevOps,Other,1,retained_unmapped
+Django,Django,Framework/Library,7,canonical
+Docker,Docker,Cloud/Infra,13,canonical
+Excel,Excel,Data/BI Tool,1,retained_unmapped
+FastAPI,FastAPI,Framework/Library,9,canonical
+Flask,Flask,Framework/Library,4,canonical
+Flutter,Flutter,Framework/Library,3,retained_unmapped
+GCP,GCP,Cloud/Infra,6,canonical
+Git,Git,Development Tool,20,canonical
+GitHub,Git,Development Tool,5,alias
+Go,Go,Language,3,canonical
+Golang,Go,Language,3,alias
+GraphQL,GraphQL,Other,2,retained_unmapped
+HTTP,HTTP,Other,2,retained_unmapped
+IP,IP,Other,2,retained_unmapped
+JPA,JPA,Framework/Library,3,canonical
+Java,Java,Language,27,canonical
+JavaScript,JavaScript,Language,17,canonical
+Kotlin,Kotlin,Language,18,canonical
+Kubernetes,Kubernetes,Cloud/Infra,5,canonical
+Laravel,Laravel,Framework/Library,1,retained_unmapped
+Linux,Linux,Cloud/Infra,4,retained_unmapped
+MFC,MFC,Framework/Library,2,retained_unmapped
+ML,ML,Other,1,retained_unmapped
+MSSQL,MSSQL,Database,1,retained_unmapped
+MVVM,MVVM,Other,2,retained_unmapped
+MariaDB,MariaDB,Database,1,canonical
+MongoDB,MongoDB,Database,6,canonical
+MySQL,MySQL,Database,16,canonical
+NLP,NLP,Other,2,retained_unmapped
+Nest.js,Nest.js,Framework/Library,1,retained_unmapped
+Next.js,Next.js,Framework/Library,19,canonical
+Node.js,Node.js,Framework/Library,10,canonical
+Nuxt.js,Nuxt.js,Framework/Library,2,retained_unmapped
+OOP,OOP,Other,1,retained_unmapped
+OpenCV,OpenCV,Framework/Library,2,retained_unmapped
+PHP,PHP,Language,1,retained_unmapped
+Pandas,Pandas,Framework/Library,2,canonical
+PostgreSQL,PostgreSQL,Database,12,canonical
+Power BI,Power BI,Data/BI Tool,1,canonical
+PyTorch,PyTorch,Framework/Library,14,canonical
+Python,Python,Language,39,canonical
+R,R,Language,1,canonical
+RTOS,RTOS,Other,1,retained_unmapped
+React,React,Framework/Library,39,canonical
+React Native,React Native,Framework/Library,2,retained_unmapped
+Recoil,Recoil,Framework/Library,4,canonical
+Redis,Redis,Database,9,canonical
+Redux,Redux,Framework/Library,4,canonical
+Ruby on Rails,Ruby on Rails,Framework/Library,1,retained_unmapped
+SQL,SQL,Language,16,canonical
+Scikit-learn,Scikit-learn,Framework/Library,3,canonical
+Shell Scripting,Shell Scripting,Other,1,retained_unmapped
+Spa,Spa,Other,1,retained_unmapped
+Spring,Spring,Framework/Library,17,canonical
+Spring Boot,Spring Boot,Framework/Library,6,canonical
+Swift,Swift,Language,1,retained_unmapped
+TCP,TCP,Other,2,retained_unmapped
+Tableau,Tableau,Data/BI Tool,2,canonical
+TensorFlow,TensorFlow,Framework/Library,9,canonical
+Tensorflow,TensorFlow,Framework/Library,2,alias
+TypeScript,TypeScript,Language,26,canonical
+UNIX,UNIX,Cloud/Infra,1,retained_unmapped
+Visual Studio,Visual Studio,Development Tool,1,retained_unmapped
+Vue.js,Vue.js,Framework/Library,3,canonical
+WPF,WPF,Framework/Library,1,retained_unmapped
+Web Socket,Web Socket,Other,1,retained_unmapped
+WebRTC,WebRTC,Other,1,retained_unmapped
+iOS,iOS,Other,1,retained_unmapped
+데이터 과학,데이터 과학,Other,1,retained_unmapped
+데이터 구조,데이터 구조,Other,1,retained_unmapped
+데이터 보안,데이터 보안,Other,1,retained_unmapped
+데이터 분석,데이터 분석,Other,2,retained_unmapped
+데이터 통합,데이터 통합,Other,1,retained_unmapped
+데이터베이스,데이터베이스,Other,1,retained_unmapped
+딥 러닝,딥 러닝,Other,1,retained_unmapped
