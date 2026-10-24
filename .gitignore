@@ -1,0 +1,7 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+scrape_output/
+wanted_jobs_fresh*.csv
