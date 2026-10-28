@@ -85,9 +85,22 @@ def main():
     results.mkdir(parents=True, exist_ok=True)
     for name, data in (("analysis_summary.json", summary), ("sample_audit.json", compute_sample_audit(df))):
         (results / name).write_text(json.dumps(data, ensure_ascii=False, indent=2, allow_nan=False) + "\n", encoding="utf-8")
-    normalization_audit(df).to_csv(results / "normalization_audit.csv", index=False)
+    normalization_audit(df).to_csv(
+        results / "normalization_audit.csv",
+        index=False,
+        lineterminator="\n",
+    )
     from analysis import compute_skill_frequency
-    plot_results({**summary, "all_skill_frequencies": compute_skill_frequency(df)}, args.output_dir, args.show)
+
+    figures_dir = results / "figures"
+    figures_dir.mkdir(parents=True, exist_ok=True)
+
+    plot_results(
+        {**summary, "all_skill_frequencies": compute_skill_frequency(df)},
+        figures_dir,
+        args.show,
+    )
+
     print(f"Analyzed {len(df)} historical rows; wrote graphs and results to {args.output_dir}")
 
 

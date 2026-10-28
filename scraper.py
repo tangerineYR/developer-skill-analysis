@@ -1,7 +1,8 @@
-"""Future collection only; 2026 provenance improvements, never rewrite 2025 CSV.
+"""Optional Wanted job-posting collection script.
 
-Semantic detail selectors unavailable / not verified against the current DOM.
-Historical hashed selectors remain centralized fallbacks. No live validation.
+Selectors have not been validated against the current Wanted DOM.
+New collections require a separate output path and cannot overwrite
+the stored wanted_jobs.csv snapshot.
 """
 import argparse
 from datetime import datetime, timezone

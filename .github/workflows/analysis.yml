@@ -18,9 +18,20 @@ jobs:
           from pathlib import Path
           import json
           output = Path('/tmp/analysis-output')
-          expected = ['graph_job_role_counts.png', 'graph_skill_heatmap.png', 'graph_skill_category_stacked.png']
-          expected += [f'graph_top_skills_{role}.png' for role in ['서버_개발자', '프론트엔드_개발자', '데이터_사이언티스트']]
-          expected += ['results/analysis_summary.json', 'results/sample_audit.json', 'results/normalization_audit.csv']
+          expected = [
+            'results/figures/graph_job_role_counts.png',
+            'results/figures/graph_skill_heatmap.png',
+            'results/figures/graph_skill_category_stacked.png',
+          ]
+          expected += [
+            f'results/figures/graph_top_skills_{role}.png'
+            for role in ['서버_개발자', '프론트엔드_개발자', '데이터_사이언티스트']
+          ]
+          expected += [
+            'results/analysis_summary.json',
+            'results/sample_audit.json',
+            'results/normalization_audit.csv',
+          ]
           for name in expected:
               assert (output / name).stat().st_size > 0, name
           for name in ['analysis_summary.json', 'sample_audit.json']:

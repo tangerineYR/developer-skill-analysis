@@ -14,13 +14,12 @@
 [![Pandas](https://img.shields.io/badge/Pandas-Data_Analysis-150458?style=for-the-badge&logo=pandas&logoColor=white)](https://pandas.pydata.org/)
 [![Selenium](https://img.shields.io/badge/Selenium-Web_Scraping-43B02A?style=for-the-badge&logo=selenium&logoColor=white)](https://www.selenium.dev/)
 
-[![Dataset](https://img.shields.io/badge/Historical_Snapshot-119_Rows-444444?style=flat-square)]()
-[![Tests](https://img.shields.io/badge/Tests-23-4C8BF5?style=flat-square)]()
-[![CI](https://img.shields.io/badge/GitHub_Actions-Passing-2088FF?style=flat-square&logo=githubactions&logoColor=white)]()
+![Dataset](https://img.shields.io/badge/Dataset_Snapshot-119_Rows-444444?style=flat-square)
+[![CI](https://github.com/tangerineYR/developer-skill-analysis/actions/workflows/analysis.yml/badge.svg?branch=main)](https://github.com/tangerineYR/developer-skill-analysis/actions/workflows/analysis.yml)
 
 <br/>
 
-[📄Historical Project Report (2025)](docs/historical-report-2025.pdf)
+[📄Course Project Report (2025)](docs/historical-report-2025.pdf)
 &nbsp;·&nbsp;
 [📊 Analysis Summary](results/analysis_summary.json)
 &nbsp;·&nbsp;
@@ -43,7 +42,7 @@ Wanted Job Search
         ↓
 Selenium + BeautifulSoup
         ↓
-Historical CSV Snapshot
+Wanted Posting Snapshot (2025)
         ↓
 Skill Parsing & Normalization
         ↓
@@ -63,7 +62,7 @@ Matplotlib / Seaborn Visualization
 | **데이터 소스** | Wanted 개발 직군 검색 결과 |
 | **검색 조건** | `years=0` |
 | **분석 직무** | 서버 · 프론트엔드 · 데이터 사이언티스트 |
-| **Historical Dataset** | 119 role-posting rows |
+| **Dataset Snapshot** | 119 role-posting rows |
 | **고유 공고 Proxy** | 112 company-title pairs |
 | **Data Collection** | Selenium · BeautifulSoup |
 | **Analysis** | Pandas |
@@ -110,7 +109,7 @@ flowchart LR
 
 # 📦 Dataset Audit
 
-Historical CSV에는 총 **119개의 role-posting row**가 있습니다.
+분석에 사용한 `\wanted_jobs.csv`에는 총 **119개의 직무-공고 행(role-posting rows)**이 있습니다.
 
 | Role | Rows |
 | --- | ---: |
@@ -129,7 +128,7 @@ Historical CSV에는 총 **119개의 role-posting row**가 있습니다.
 7 proxies appear in multiple role queries
 ```
 
-Historical CSV에는 Wanted의 실제 job ID와 posting URL이 저장되지 않았기 때문에, `company + title` 조합은 **공고 identity의 proxy**로만 사용합니다.
+수집 당시 저장한 CSV에는 Wanted의 job ID와 공고 URL이 없으므로, `company + title` 조합은 **공고 identity의 proxy**로만 사용합니다.
 
 또 제목 기준 heuristic에서 9개 row가 1년 이상의 경력 범위를 명시했습니다. 이 heuristic은 표본 감사용이며 row 삭제나 strict entry-level 판정에는 사용하지 않았습니다.
 
@@ -139,15 +138,9 @@ Historical CSV에는 Wanted의 실제 job ID와 posting URL이 저장되지 않�
 
 ## Problem
 
-2025년 구현에서는 normalization map에 등록되지 않은 기술이 분석 단계에서 조용히 제거됐습니다.
+채용공고에는 동일한 기술이 서로 다른 표기로 등장하며, 사전에 정의한 기술명 매핑에 포함되지 않은 기술도 존재합니다.
 
-Historical snapshot에는:
-
-```text
-503 raw skill mentions
-```
-
-이 존재했지만 기존 pipeline에서는 상당수 기술이 map에 없다는 이유만으로 사라질 수 있었습니다.
+분석 대상 CSV에는 총 **503개의 원시 기술 언급(raw skill mentions)**이 있습니다. 등록된 별칭은 대표 기술명으로 통합하되, 매핑되지 않은 유효한 기술은 제거하지 않고 유지합니다.
 
 예:
 
@@ -166,7 +159,7 @@ NLP
 
 ## Engineering Decision
 
-2026 Portfolio Refactoring에서는 다음 정책으로 변경했습니다.
+현재 정규화 로직은 등록된 기술명의 별칭을 통합하고, 매핑되지 않은 유효한 기술도 보존하도록 설계했습니다.
 
 ```text
 Known Alias
@@ -211,7 +204,7 @@ Silently dropped valid mentions    0
 
 ## 1. Server Developer
 
-Historical server sample에서 가장 많이 등장한 기술은:
+서버 개발자 표본에서 가장 많이 등장한 기술은 다음과 같습니다.
 
 | Skill | Posting-row Prevalence |
 | --- | ---: |
@@ -264,7 +257,7 @@ React와 TypeScript가 표본 내에서 높은 빈도로 나타났으며, 기술
   <img src="results/figures/graph_top_skills_데이터_사이언티스트.png" width="820" alt="Data scientist top skills" />
 </p>
 
-Python이 가장 넓게 나타났고 PyTorch와 TensorFlow가 뒤를 이어, 이 historical sample에서는 ML framework가 주요 요구 기술군으로 나타났습니다.
+Python이 가장 넓게 나타났고 PyTorch와 TensorFlow가 뒤를 이어, 이 분석 표본에서는 머신러닝 프레임워크가 주요 기술군으로 나타났습니다.
 
 ---
 
@@ -366,9 +359,9 @@ visualizer.py
 
 ---
 
-## 2. Malformed Data를 조용히 누락하지 않음
+## 2. Strict Input Validation
 
-기존 pipeline은 skill column parsing에 실패하면 빈 list로 대체할 수 있었습니다.
+analysis.py의 parse_skill_list()는 기술 목록이 올바른 리스트 형식인지 확인하고, 문자열이 아닌 값이나 공백만 있는 기술명을 발견하면 행 번호와 함께 ValueError를 발생시킵니다.
 
 현재는:
 
@@ -386,26 +379,21 @@ Missing required column
 
 ---
 
-## 3. Historical Snapshot 보호
+## 3. Dataset Snapshot Integrity
 
-`wanted_jobs.csv`는 2025 프로젝트의 provenance이므로 fresh scraping으로 덮어쓸 수 없도록 보호했습니다.
+scraper.py의 validate_output()은 분석용 데이터셋인 wanted_jobs.csv와 기존에 존재하는 출력 파일을 덮어쓰지 못하도록 검사합니다.
 
-향후 scraper는:
+새로운 공고를 수집하려면 별도 출력 경로를 지정해야 합니다. 다음은 CLI 사용 형식이며, 현재 Wanted 웹페이지와의 호환성이 검증된 실행 예시는 아닙니다.
 
-```bash
-python scraper.py \
-  --output scrape_output/wanted_jobs_new.csv
+```powershell
+python scraper.py --output scrape_output/wanted_jobs_new.csv
 ```
-
-처럼 명시적인 별도 output을 요구합니다.
-
-이미 존재하는 파일도 자동으로 overwrite하지 않습니다.
 
 ---
 
-## 4. Future Scraping Provenance
+## 4. Collection Metadata
 
-향후 새로운 데이터를 수집할 경우 다음 metadata를 저장하도록 개선했습니다.
+`scraper.py`는 수집에 성공한 공고를 저장할 때 다음 필드를 CSV에 기록하도록 구현돼 있습니다.
 
 ```text
 source
@@ -418,15 +406,13 @@ title
 skills
 ```
 
-Historical 2025 CSV에 존재하지 않는 URL이나 job ID를 사후에 추측하여 채워 넣지는 않았습니다.
-
-현재 Wanted DOM에 대한 live scraper 재검증은 수행하지 않았으며, hashed CSS selector 일부는 페이지 변경에 따라 다시 검증이 필요할 수 있습니다.
+분석 대상 `wanted_jobs.csv`에는 공고 URL이나 Wanted job ID가 저장되지 않았으므로 해당 정보를 임의로 복원하지 않습니다. 수집 스크립트의 CSS 선택자는 현재 Wanted 웹페이지에서 실시간으로 검증되지 않았으며, 사이트 구조 변경 시 작동하지 않을 수 있습니다.
 
 ---
 
 # 🧪 Tests & CI
 
-현재 analysis layer에는 **23개의 automated tests**가 있습니다.
+이 저장소에는 **23개의 자동화 테스트**가 있으며, 기술명 정규화, 집계 지표, 데이터셋 무결성, 스크레이퍼의 출력 경로 보호 및 URL 처리 등을 검증합니다. 실제 Wanted 웹페이지에 접속하는 live scraping 테스트는 포함하지 않습니다.
 
 주요 검증 범위:
 
@@ -494,7 +480,7 @@ source .venv/bin/activate
 Windows:
 
 ```powershell
-.venv\Scripts\activate
+.\.venv\Scripts\Activate.ps1
 ```
 
 의존성 설치:
@@ -503,21 +489,16 @@ Windows:
 pip install -r requirements.txt
 ```
 
-## Historical Analysis
+## Reproduce Dataset Analysis
 
 ```bash
-python visualizer.py \
-  --input wanted_jobs.csv \
-  --output-dir .
+python visualizer.py --input wanted_jobs.csv --output-dir .
 ```
 
 headless 실행이 기본이며, plotting window가 필요하면:
 
 ```bash
-python visualizer.py \
-  --input wanted_jobs.csv \
-  --output-dir . \
-  --show
+python visualizer.py --input wanted_jobs.csv --output-dir . --show
 ```
 
 를 사용합니다.
@@ -530,10 +511,10 @@ python visualizer.py \
 developer-skill-analysis/
 │
 ├── analysis.py                  # 기술 정규화·표본 감사·집계 로직
-├── scraper.py                   # Wanted 채용공고 수집 및 provenance 기록
+├── scraper.py                   # 선택적 채용공고 수집(실시간 호환성 미검증)
 ├── visualizer.py                # 분석 결과 시각화 및 artifact 생성
 │
-├── wanted_jobs.csv              # 2025 Historical Project의 frozen dataset
+├── wanted_jobs.csv              # 2025년 Wanted 검색 결과 표본
 ├── requirements.txt
 ├── README.md
 │
@@ -560,28 +541,30 @@ developer-skill-analysis/
 
 ---
 
-# 🔄 Historical Project vs Portfolio Refactoring
+# 🔧 Engineering Decisions & Validation
 
-| 구분 | 2025 Historical Project | 2026 Portfolio Refactoring |
-| --- | --- | --- |
-| Data | Wanted 119-row snapshot | Historical snapshot 그대로 보존 |
-| Collection | Selenium + BeautifulSoup | provenance / overwrite protection 보강 |
-| Normalization | Known mapping 중심 | Unknown valid skill 보존 |
-| Analysis | 직무별 기술 비교 | denominator semantics 명시 |
-| Sample Definition | 119 rows | 112 proxy postings / 7 overlaps audit |
-| Category | 기존 taxonomy | Cloud/Infra · Tooling 재정의 |
-| Validation | 수동 확인 | 23 automated tests |
-| Reproduction | Script 중심 | Offline deterministic CI |
+| Concern | Engineering Decision | Verification |
+|---|---|---|
+| Dataset Integrity | Preserve the 119-row Wanted snapshot | Frozen CSV SHA-256 test |
+| Sample Definition | Distinguish role-posting rows from unique company-title proxies | Sample audit |
+| Role Overlap | Identify postings appearing in multiple role queries | Cross-role duplicate audit |
+| Skill Aliases | Map equivalent skill names to canonical names | Alias normalization tests |
+| Unmapped Skills | Preserve valid skills without predefined mappings | Unknown skill preservation tests |
+| Duplicate Mentions | Count each canonical skill once per role-posting row | Deduplication tests |
+| Input Quality | Reject malformed skill lists and missing required columns | Input validation tests |
+| Metric Denominators | Separate skill occurrence composition from posting prevalence | Category metric tests |
+| Dataset Protection | Prevent overwriting the frozen CSV | Scraper output validation tests |
+| Reproducibility | Generate figures and structured results from the stored snapshot | Offline analysis CI |
 
-2026 작업은 기존 결과를 더 좋아 보이게 만들기 위한 재분석이 아니라, **2025 snapshot을 그대로 유지하면서 분석 과정의 의미와 재현성을 명확하게 만든 작업**입니다.
+The analysis reports descriptive patterns within the collected sample. It does not estimate the entire recruitment market or establish causal relationships.
 
 ---
 
 # ⚠️ Scope & Limitations
 
-**Historical Snapshot**
+**Dataset Snapshot**
 
-이 데이터는 2025년에 수집된 Wanted 검색 결과의 snapshot입니다. 현재 채용시장의 상태를 의미하지 않습니다.
+이 데이터는 2025년에 수집한 Wanted 검색 결과 표본입니다. 정확한 수집 일시는 별도로 기록돼 있지 않으며, 현재 채용시장의 상태를 나타내지 않습니다.
 
 **Not a Market Census**
 
@@ -593,7 +576,7 @@ developer-skill-analysis/
 
 **Posting Identity**
 
-Historical CSV에는 posting URL과 Wanted job ID가 없으므로 `company + title`을 proxy로 사용합니다.
+분석 대상 CSV에는 posting URL과 Wanted job ID가 없어 `\company + title`을 공고 식별의 대체 기준(proxy)으로 사용합니다.
 
 **Cross-role Overlap**
 
@@ -601,19 +584,11 @@ Historical CSV에는 posting URL과 Wanted job ID가 없으므로 `company + tit
 
 **Skill-detection Selection**
 
-Historical scraper는 기술 스택을 하나 이상 탐지한 공고만 CSV에 저장했습니다. 따라서 수집 결과는 Wanted 검색 결과 전체를 그대로 보존한 표본이 아닙니다.
+수집 로직은 기술 스택을 하나 이상 탐지한 공고만 CSV에 기록하도록 구성돼 있습니다. 따라서 수집 결과는 Wanted 검색 결과 전체를 그대로 보존한 표본이 아닙니다.
 
-**Current Scraper Compatibility**
+**Scraper Compatibility**
 
-2026 refactoring에서는 scraper provenance와 failure handling을 개선했지만 현재 Wanted DOM을 대상으로 live scraping을 다시 수행하지 않았습니다.
-
----
-
-# 💡 Future Direction
-
-2025 프로젝트에서는 분석 결과를 확장해 사용자의 현재 기술과 목표 직무 요구 기술을 비교하는 **개인화된 Skill Gap Analysis / Learning Roadmap 서비스**를 후속 아이디어로 제안했습니다.
-
-이 기능은 현재 repository에 구현되어 있지 않으며, 본 repository는 **채용공고 데이터 수집·정제·분석·시각화 pipeline**에 범위를 한정합니다.
+스크레이퍼의 출력 파일 보호와 수집 메타데이터 저장은 코드에 구현돼 있지만, 현재 Wanted 웹페이지에서의 실시간 수집 성공 여부는 검증하지 않았습니다.
 
 ---
 

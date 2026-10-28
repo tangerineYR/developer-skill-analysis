@@ -70,7 +70,7 @@ SKILL_CATEGORY_MAP = {
 }
 CATEGORIES = tuple(SKILL_CATEGORY_MAP)
 SAMPLE_SCOPE = {
-    "source": "Wanted historical 2025 project CSV",
+    "source": "Wanted search results snapshot (2025)",
     "search_filter": "years=0",
     "strict_entry_level_verified": False,
     "collection_date": None,
@@ -206,8 +206,8 @@ def build_summary(df, source_file):
     normalization = normalization_audit(df)
     raw = sum(map(len, df["skills_raw"]))
     canonical = sum(map(len, df["skills"]))
-    return {"analysis_version": ANALYSIS_VERSION, "historical_project_year": 2025,
-            "analysis_revision_year": 2026, "source_file": Path(source_file).name,
+    return {"analysis_version": ANALYSIS_VERSION, "snapshot_year": 2025,
+            "source_file": Path(source_file).name,
             "source_sha256": hashlib.sha256(Path(source_file).read_bytes()).hexdigest(),
             **{k: audit[k] for k in ("row_count", "role_counts", "unique_company_title_proxy_count", "cross_role_duplicate_proxy_count")},
             "raw_skill_mentions": raw, "canonical_skill_mentions": canonical,

@@ -5,3 +5,5 @@ __pycache__/
 .pytest_cache/
 scrape_output/
 wanted_jobs_fresh*.csv
+# Figures generated at the repository root by earlier runs
+/graph_*.png
