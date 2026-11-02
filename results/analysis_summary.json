@@ -1,7 +1,6 @@
 {
   "analysis_version": "2.0",
-  "historical_project_year": 2025,
-  "analysis_revision_year": 2026,
+  "snapshot_year": 2025,
   "source_file": "wanted_jobs.csv",
   "source_sha256": "1fc9dd4a73dffd3c6cd2e3b7a0aa76c50f0ab67798243d7552b537c6ac95a5f1",
   "row_count": 119,
@@ -390,7 +389,7 @@
     "retained_unmapped_skill_mentions": "Raw mentions retained by fallback before within-row deduplication"
   },
   "sample_scope": {
-    "source": "Wanted historical 2025 project CSV",
+    "source": "Wanted search results snapshot (2025)",
     "search_filter": "years=0",
     "strict_entry_level_verified": false,
     "collection_date": null,

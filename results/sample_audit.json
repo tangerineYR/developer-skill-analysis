@@ -123,7 +123,7 @@
   "experience_heuristic": "Explicit integer >=1 followed by 년; audit only, not ground truth. Includes 신입~1년차.",
   "rows_removed": 0,
   "sample_scope": {
-    "source": "Wanted historical 2025 project CSV",
+    "source": "Wanted search results snapshot (2025)",
     "search_filter": "years=0",
     "strict_entry_level_verified": false,
     "collection_date": null,
