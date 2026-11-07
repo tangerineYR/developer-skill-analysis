@@ -543,20 +543,21 @@ developer-skill-analysis/
 
 # 🔧 Engineering Decisions & Validation
 
-| Concern | Engineering Decision | Verification |
-|---|---|---|
-| Dataset Integrity | Preserve the 119-row Wanted snapshot | Frozen CSV SHA-256 test |
-| Sample Definition | Distinguish role-posting rows from unique company-title proxies | Sample audit |
-| Role Overlap | Identify postings appearing in multiple role queries | Cross-role duplicate audit |
-| Skill Aliases | Map equivalent skill names to canonical names | Alias normalization tests |
-| Unmapped Skills | Preserve valid skills without predefined mappings | Unknown skill preservation tests |
-| Duplicate Mentions | Count each canonical skill once per role-posting row | Deduplication tests |
-| Input Quality | Reject malformed skill lists and missing required columns | Input validation tests |
-| Metric Denominators | Separate skill occurrence composition from posting prevalence | Category metric tests |
-| Dataset Protection | Prevent overwriting the frozen CSV | Scraper output validation tests |
-| Reproducibility | Generate figures and structured results from the stored snapshot | Offline analysis CI |
 
-The analysis reports descriptive patterns within the collected sample. It does not estimate the entire recruitment market or establish causal relationships.
+| 검토 항목 | 설계 결정 | 검증 방법 |
+|---|---|---|
+| 원본 데이터 무결성 | 2025년에 수집한 Wanted 검색 결과 119개 행을 고정된 분석 표본으로 보존 | 원본 CSV SHA-256 검증 테스트 |
+| 분석 표본 정의 | 직무별 검색 결과 행과 회사명·공고명 조합으로 추정한 고유 공고를 구분 | 표본 감사 결과 검증 |
+| 직무 간 중복 | 동일 공고가 여러 직무 검색 결과에 포함된 경우를 식별 | 직무 간 중복 공고 감사 |
+| 기술명 정규화 | 동일한 기술을 가리키는 표기 차이를 표준 기술명으로 통합 | 기술명 정규화 테스트 |
+| 미등록 기술 보존 | 정규화 사전에 없는 유효한 기술명도 누락하지 않고 원본 표기로 유지 | 미등록 기술 보존 테스트 |
+| 중복 기술 집계 방지 | 동일 공고 행에서 같은 정규화 기술명을 한 번만 집계 | 행 내부 중복 제거 테스트 |
+| 입력 데이터 검증 | 잘못된 기술 목록 형식과 필수 컬럼 누락을 명시적으로 거부 | 입력 유효성 검증 테스트 |
+| 분석 지표의 분모 구분 | 기술 언급의 카테고리 구성 비율과 공고별 카테고리 포함 비율을 별도로 계산 | 카테고리 지표 계산 테스트 |
+| 원본 데이터 보호 | 새로운 데이터 수집 과정에서 기존 분석용 CSV가 덮어써지지 않도록 제한 | 스크레이퍼 출력 경로 검증 테스트 |
+| 분석 재현성 | 보존된 표본을 입력으로 분석 지표와 시각화 결과를 재생성 | 오프라인 분석 GitHub Actions |
+
+본 분석은 수집된 표본 안에서 관찰되는 직무별 기술 요구의 차이를 기술통계로 보여줍니다. 분석 결과를 전체 개발자 채용시장의 수요로 일반화하거나, 특정 기술과 채용 결과 사이의 인과관계로 해석하지 않습니다.
 
 ---
 
@@ -576,7 +577,7 @@ The analysis reports descriptive patterns within the collected sample. It does n
 
 **Posting Identity**
 
-분석 대상 CSV에는 posting URL과 Wanted job ID가 없어 `\company + title`을 공고 식별의 대체 기준(proxy)으로 사용합니다.
+분석 대상 CSV에는 posting URL과 Wanted job ID가 없어 `company + title`을 공고 식별의 대체 기준(proxy)으로 사용합니다.
 
 **Cross-role Overlap**
 
@@ -594,8 +595,9 @@ The analysis reports descriptive patterns within the collected sample. It does n
 
 <div align="center">
 
-**Collect → Normalize → Audit → Analyze → Visualize**
+**데이터 수집 → 기술명 정규화 → 표본 검증 → 직무별 분석 → 시각화**
 
-_Data analysis is only useful when the denominator, sample scope, and information loss are explicit._
+_신뢰할 수 있는 데이터 분석은 표본의 범위와 지표의 분모, 정규화 과정에서의 정보 보존을 명확히 하는 것에서 시작됩니다._
 
 </div>
+
